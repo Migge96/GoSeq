@@ -2,6 +2,8 @@ package bio
 
 import "testing"
 
+// test for GC_Content
+
 type testpair struct {
 	values string
 	content float64
@@ -13,7 +15,8 @@ var tests = []testpair{
 	{"AATTAAT", 0},
 }
 
-func TestCountNuc(t *testing.T) {
+
+func TestGcContent(t *testing.T) {
 	for _, pair := range tests {
 		v := gcContent(pair.values)
 		if v != pair.content {
@@ -24,5 +27,31 @@ func TestCountNuc(t *testing.T) {
 			)
 		}
 
+	}
+}
+
+type testPairEditDist struct {
+	seqX string
+	seqY string
+	dist int
+}
+
+var testsEdit = []testPairEditDist{
+	{ "DBADAD", "BCACD",
+	 4,
+	},
+}
+
+func TestEditDist(t *testing.T) {
+	for _,pair := range testsEdit {
+		v := editDistance(pair.seqX, pair.seqY)
+		if v != pair.dist {
+			t.Error(
+				"For x: ", pair.seqX,
+				"for y: ", pair.seqY,
+				"expected", pair.dist,
+				"got", v,
+			)
+		}
 	}
 }

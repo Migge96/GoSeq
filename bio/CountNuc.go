@@ -1,3 +1,7 @@
+/*
+Various implementations of bioinformat sequence analysis algorithmn.
+ */
+
 package bio
 
 import (
@@ -29,33 +33,28 @@ func hamiltonDistance(x, y string) int {
 	}
 }
 
-func editDistance(x, y string) int  {
-	var editMatrix [len(x) + 1][len(y) + 1]int
-	for j := 0; j< len(y) + 1; j ++  {
-		for i := 0; i < len(x) + 1; i ++ {
-			if j == 0 {
-				editMatrix[j][i] = i
+func editDistance(x, y string) int {
+	x = "#" + x
+	y = "#" + y
+	editMatrix := make([][]int, len(y))
+	for k := 0; k < len(y); k++ {
+		editMatrix[k] = make([]int, len(x))
+	}
+	for row, h := range editMatrix {
+		for col := range h {
+			if row == 0 {
+				editMatrix[row][col] = col
 			}
-			if i == 0 {
-				editMatrix[j][i] = j
+			if col == 0 {
+				editMatrix[row][col] = row
 			}
-			if i != 0 && j != 0 {
-				diagonal := editMatrix[i - 1][j - 1] + hamiltonDistance(string(x[i]), string(y[j]))
-				horizontal := editMatrix[i - 1][j] + 1
-				vertical := editMatrix[i][j - 1] + 1
-				 editMatrix[i][j] = int(math.Min(float64(diagonal), math.Min(float64(horizontal), float64(vertical))))
-
+			if col != 0 && row != 0 {
+				diagonal := float64(editMatrix[row-1][col-1] + hamiltonDistance(string(x[col]), string(y[row])))
+				horizontal := float64(editMatrix[row-1][col] + 1)
+				vertical := float64(editMatrix[row][col-1] + 1)
+				editMatrix[row][col] = int(math.Min(diagonal, math.Min(horizontal, vertical)))
 			}
 		}
 	}
-	result := editMatrix[len(x) + 1][len(y) + 1]
-	return result
+	return editMatrix[len(y)-1][len(x)-1]
 }
-
-/*
-func main(){
-    countNuc("AGCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGCTTCTGAACTG")
-    fmt.Println("A:",a, "T:",t, "G:",g, "C:",c)
-
-}
-
