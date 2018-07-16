@@ -38,8 +38,13 @@ type testPairEditDist struct {
 
 var testsEdit = []testPairEditDist{
 	{ "DBADAD", "BCACD",
-	 4,
-	},
+	 4,},
+	 {"DBADAD", "", 6 },
+	 {"", "BCACD", 5},
+	 {"", "", 0},
+	 {"HALLO", "HALLO", 0},
+	 {"AGCAGTTCCTTGACCATGGAGCTGCCTTGGACAGCACTCTTCCTCAGTACCTTCCTCCTGGGTCTTTCAT",
+	 "ACATACCTCCTAACAGTTCCTAGAAAATGGAGCTGTCTTGGCATGTAGTCTTTATTGCCCTGCTAAGTTT", 36},
 }
 
 func TestEditDist(t *testing.T) {
@@ -55,3 +60,13 @@ func TestEditDist(t *testing.T) {
 		}
 	}
 }
+
+func benchmarkDist(x, y string , b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		editDistance(x, y)
+	}
+}
+
+func BenchmarkDist1(b *testing.B)  {benchmarkDist(testsEdit[0].seqX, testsEdit[0].seqY, b)}
+func BenchmarkDist3(b *testing.B)  {benchmarkDist(testsEdit[3].seqX, testsEdit[3].seqY, b)}
+func BenchmarkDist5(b *testing.B)  {benchmarkDist(testsEdit[5].seqX, testsEdit[5].seqY, b)}
