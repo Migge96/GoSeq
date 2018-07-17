@@ -36,6 +36,12 @@ type testPairEditDist struct {
 	dist int
 }
 
+type testPairEditSeq struct {
+	seqX string
+	seqY string
+	editSeq string
+}
+
 var testsEdit = []testPairEditDist{
 	{ "DBADAD", "BCACD",
 	 4,},
@@ -47,7 +53,17 @@ var testsEdit = []testPairEditDist{
 	 "ACATACCTCCTAACAGTTCCTAGAAAATGGAGCTGTCTTGGCATGTAGTCTTTATTGCCCTGCTAAGTTT", 36},
 }
 
-func TestEditDist(t *testing.T) {
+
+var testsEditSeq = []testPairEditSeq{
+	{ "DBADAD", "BCACD",
+		"ICCI",},
+	{"DBADAD", "", "IC" },
+	{"", "BCACD", "IIII"},
+	{"", "", ""},
+	{"HALLO", "HALLO", ""},
+}
+
+func TestEditDistance(t *testing.T) {
 	for _,pair := range testsEdit {
 		v := editDistance(pair.seqX, pair.seqY)
 		if v != pair.dist {
@@ -55,6 +71,20 @@ func TestEditDist(t *testing.T) {
 				"For x: ", pair.seqX,
 				"for y: ", pair.seqY,
 				"expected", pair.dist,
+				"got", v,
+			)
+		}
+	}
+}
+
+func TestEditSequence(t *testing.T) {
+	for _,pair := range testsEditSeq {
+		v := editSequence(pair.seqX, pair.seqY)
+		if v != pair.editSeq {
+			t.Error(
+				"For x: ", pair.seqX,
+				"for y: ", pair.seqY,
+				"expected", pair.editSeq,
 				"got", v,
 			)
 		}
