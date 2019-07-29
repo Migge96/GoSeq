@@ -4,22 +4,25 @@ package distances
 func EditDistance(seqA, seqB string) int {
 	lenA := (len(seqA) + 1)
 	lenB := (len(seqB) + 1)
+
 	// Initiliaze the Edit Matrix
 	editMatrix := make([][]int, lenA)
 	for i := 0; i < lenA; i++ {
 		editMatrix[i] = make([]int, lenB)
 	}
 
+	//Fill the epsilon Columns
 	for i := 0; i < lenA; i++ {
 		editMatrix[i][0] = i
 
 	}
-
+	//Fill the epsilon Row
 	for j := 0; j < lenB; j++ {
 		editMatrix[0][j] = j
 
 	}
 
+	//Compute all Edit-Matrix Entries
 	for i := 1; i < lenA; i++ {
 		for j := 1; j < lenB; j++ {
 			vertical := editMatrix[i-1][j] + 1
@@ -30,7 +33,7 @@ func EditDistance(seqA, seqB string) int {
 				diagonal++
 			}
 
-			editMatrix[i][j] = minOf3(vertical, horizontal, diagonal)
+			editMatrix[i][j] = minOf3(&vertical, &horizontal, &diagonal)
 
 		}
 	}
@@ -38,15 +41,15 @@ func EditDistance(seqA, seqB string) int {
 	return editMatrix[lenA-1][lenB-1]
 }
 
-func minOf3(a, b, c int) int {
-	min := a
+func minOf3(a, b, c *int) int {
+	min := *a
 
-	if b < min {
-		min = b
+	if *b < min {
+		min = *b
 	}
 
-	if c < min {
-		min = c
+	if *c < min {
+		min = *c
 	}
 
 	return min
