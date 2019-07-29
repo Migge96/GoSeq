@@ -1,6 +1,8 @@
 package distances
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestEditDistance(t *testing.T) {
 	t.Run("Simple DNA Example with len 5 and 6", func(t *testing.T) {
@@ -39,4 +41,17 @@ func assertDistance(t *testing.T, want int, seqA, seqB string) {
 		t.Errorf("got %d, wanted %d, given %q and %q", got, want, seqA, seqB)
 	}
 
+}
+
+func BenchmarkEditDistance(b *testing.B) {
+	seqA := "EWIWGGFSVDKATLNRFFAFHFILPFTMVALAGVHLTFLHETGSNNPLGLTSDSDKIPFHPYYTIKDFLG"
+	seqB := "LCLYTHIGRNIYYGSYLYSETWNTGIMLLLITMATAFMGYVLPWGQMSFWGATVITNLFSAIPYIGTNLV"
+
+	b.ReportAllocs()
+	// String is often encoded as 8 Byte or 16 Byte. With 2 String as Input we take 32 Bytes Per Operation
+	b.SetBytes(32)
+
+	for i := 0; i < b.N; i++ {
+		EditDistance(seqA, seqB)
+	}
 }
