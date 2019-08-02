@@ -7,16 +7,34 @@ import (
 
 func TestQGramDistance(t *testing.T) {
 
-	seqA := "acaa"
-	seqB := "acac"
-	alphabetSize := 4
+	t.Run("small run on dna with 4 size", func(t *testing.T) {
+		seqA := "acaa"
+		seqB := "acac"
+		alphabetSize := 4
 
-	want := 2
-	got := qGramDistance(seqA, seqB, alphabetSize)
+		want := 2
+		got := qGramDistance(seqA, seqB, alphabetSize)
 
-	if got != want {
-		t.Errorf("wanted %v got %v , given %v and %v", want, got, seqA, seqB)
-	}
+		if got != want {
+			t.Errorf("wanted %v got %v , given %v and %v", want, got, seqA, seqB)
+		}
+
+	})
+
+	t.Run("small run on dna with bigger sizes", func(t *testing.T) {
+		seqA := "gagccatcattcgctgcttggagtaaggtgcgaatcaggaagctacccggcacaaggcaccgatcgccgggcagcacctgtgacttacaggcggcaccgattatgggcatataaagcggt"
+		seqB := "gtgtgtcgtgagaacgcgaaaaggccgcggcgataccgaatacgaggataggtacgatggtcaattaggcacgaagtatggttccggtattgaccctacagcaaaattttgtcaaatcgt"
+		alphabetSize := 4
+
+		want := 92
+		got := qGramDistance(seqA, seqB, alphabetSize)
+
+		if got != want {
+			t.Errorf("wanted %v got %v , given %v and %v", want, got, seqA, seqB)
+		}
+
+	})
+
 }
 func TestQGramProfile(t *testing.T) {
 
@@ -54,6 +72,6 @@ func BenchmarkQGramDistance(b *testing.B) {
 	b.SetBytes(32)
 
 	for i := 0; i < b.N; i++ {
-		EditDistance(seqA, seqB)
+		qGramDistance(seqA, seqB, 4)
 	}
 }
