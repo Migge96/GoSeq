@@ -2,24 +2,44 @@ package distances
 
 import (
 	"math"
-	"strings"
+	"unicode"
 )
 
-func qGramDistance(seqA, seqB string, alphabetSize int) int {
-	q := int(math.Log(float64(len(seqA))) / math.Log(float64(alphabetSize)))
+const dna = "acgt"
+const rna = "acgu"
+const prot = "galmfwkqespvicyhrndt"
 
-	if q == 1 {
+func selectAlphabet(short string, alphabet *string) {
+	switch short {
+	case "dna":
+		*alphabet = dna
+	case "rna":
+		*alphabet = rna
+	case "prot":
+		*alphabet = prot
+	}
+}
+
+func qGramDistance(seqA, seqB, alphabetShort string) int {
+	var alphabet string
+	selectAlphabet(alphabetShort, &alphabet)
+	alphabetSize := len(alphabet)
+
+	q := int(math.Log2(float64(len(seqA))) / math.Log2(float64(alphabetSize)))
+
+	if q <= 1 {
 		q = 2
 	}
-	profile := make([]int, int(math.Pow(float64(alphabetSize), float64(q))))
+	profile := make([]int, pow(alphabetSize, q))
 	result := 0
 	for i := 0; i < len(seqA)-q+1; i++ {
 		temp := seqA[i : i+q]
-		profile[ranking(temp, q, alphabetSize)]++
+		profile[ranking(temp, q, alphabetShort)]++
 	}
+
 	for i := 0; i < len(seqB)-q+1; i++ {
 		temp := seqB[i : i+q]
-		profile[ranking(temp, q, alphabetSize)]--
+		profile[ranking(temp, q, alphabetShort)]--
 	}
 
 	for _, val := range profile {
@@ -28,35 +48,37 @@ func qGramDistance(seqA, seqB string, alphabetSize int) int {
 	return result
 }
 
-func qGramProfile(sequence string, q, alphabetSize int) []int {
-	profile := make([]int, int(math.Pow(float64(alphabetSize), float64(q)))-1)
+func qGramProfile(sequence string, q int, alphabetShort string) []int {
+	var alphabet string
+	selectAlphabet(alphabetShort, &alphabet)
+	alphabetSize := len(alphabet)
+
+	profile := make([]int, pow(alphabetSize, q))
 	for i := 0; i < len(sequence)-1; i++ {
 		temp := sequence[i : i+q]
-		profile[ranking(temp, q, alphabetSize)]++
+		profile[ranking(temp, q, alphabetShort)]++
 
 	}
 
 	return profile
 }
 
-func ranking(qgram string, q, alphabetSize int) int {
+func ranking(qgram string, q int, alphabetShort string) int {
+	var alphabet string
+	selectAlphabet(alphabetShort, &alphabet)
 
-	//alphabet := "acgt"
+	var alphabetMap = make(map[rune]int)
+	for i, char := range alphabet {
+		alphabetMap[char] = i
+	}
+	alphabetSize := len(alphabet)
+
 	rank := 0
 
 	for i, char := range qgram {
-		temp := strings.ToLower(string(char))
+		temp := unicode.ToLower(char)
 
-		switch temp {
-		case "a":
-			rank += 0 * pow(alphabetSize, i)
-		case "c":
-			rank += 1 * pow(alphabetSize, i)
-		case "g":
-			rank += 2 * pow(alphabetSize, i)
-		case "t":
-			rank += 3 * pow(alphabetSize, i)
-		}
+		rank += alphabetMap[temp] * pow(alphabetSize, i)
 
 	}
 
