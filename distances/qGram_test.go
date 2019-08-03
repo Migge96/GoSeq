@@ -63,6 +63,26 @@ func TestRanking(t *testing.T) {
 	}
 }
 
+func TestPow(t *testing.T) {
+	t.Run("Compute 2 ^ 3", func(t *testing.T) {
+		want := 8
+		got := pow(2, 3)
+
+		if got != want {
+			t.Errorf("wanted %d, got %d", want, got)
+		}
+	})
+
+	t.Run("Compute 5 ^ 0", func(t *testing.T) {
+		want := 1
+		got := pow(5, 0)
+
+		if got != want {
+			t.Errorf("wanted %d, got %d", want, got)
+		}
+	})
+}
+
 func BenchmarkQGramDistance(b *testing.B) {
 	seqA := "gagccatcattcgctgcttggagtaaggtgcgaatcaggaagctacccggcacaaggcaccgatcgccgggcagcacctgtgacttacaggcggcaccgattatgggcatataaagcggt"
 	seqB := "gtgtgtcgtgagaacgcgaaaaggccgcggcgataccgaatacgaggataggtacgatggtcaattaggcacgaagtatggttccggtattgaccctacagcaaaattttgtcaaatcgt"

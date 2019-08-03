@@ -41,6 +41,7 @@ func qGramProfile(sequence string, q, alphabetSize int) []int {
 
 func ranking(qgram string, q, alphabetSize int) int {
 
+	//alphabet := "acgt"
 	rank := 0
 
 	for i, char := range qgram {
@@ -48,18 +49,26 @@ func ranking(qgram string, q, alphabetSize int) int {
 
 		switch temp {
 		case "a":
-			rank += 0 * int(math.Pow(float64(alphabetSize), float64(i)))
+			rank += 0 * pow(alphabetSize, i)
 		case "c":
-			rank += 1 * int(math.Pow(float64(alphabetSize), float64(i)))
+			rank += 1 * pow(alphabetSize, i)
 		case "g":
-			rank += 2 * int(math.Pow(float64(alphabetSize), float64(i)))
+			rank += 2 * pow(alphabetSize, i)
 		case "t":
-			rank += 3 * int(math.Pow(float64(alphabetSize), float64(i)))
+			rank += 3 * pow(alphabetSize, i)
 		}
 
 	}
 
 	return rank
+}
+
+func pow(base, exponent int) int {
+	result := 1
+	for i := 0; i < exponent; i++ {
+		result *= base
+	}
+	return result
 }
 
 func abs(x int) int {
