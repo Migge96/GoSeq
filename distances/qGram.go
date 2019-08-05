@@ -20,7 +20,7 @@ func selectAlphabet(short string, alphabet *string) {
 	}
 }
 
-func qGramDistance(seqA, seqB, alphabetShort string) int {
+func QGramDistance(seqA, seqB, alphabetShort string) int {
 	var alphabet string
 	selectAlphabet(alphabetShort, &alphabet)
 	alphabetSize := len(alphabet)

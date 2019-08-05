@@ -13,7 +13,7 @@ func TestQGramDistance(t *testing.T) {
 		alphabet := "dna"
 
 		want := 2
-		got := qGramDistance(seqA, seqB, alphabet)
+		got := QGramDistance(seqA, seqB, alphabet)
 
 		if got != want {
 			t.Errorf("wanted %v got %v , given %v and %v", want, got, seqA, seqB)
@@ -27,7 +27,7 @@ func TestQGramDistance(t *testing.T) {
 		alphabet := "prot"
 
 		want := 2
-		got := qGramDistance(seqA, seqB, alphabet)
+		got := QGramDistance(seqA, seqB, alphabet)
 
 		if got != want {
 			t.Errorf("wanted %v got %v , given %v and %v", want, got, seqA, seqB)
@@ -41,7 +41,7 @@ func TestQGramDistance(t *testing.T) {
 		alphabet := "dna"
 
 		want := 92
-		got := qGramDistance(seqA, seqB, alphabet)
+		got := QGramDistance(seqA, seqB, alphabet)
 
 		if got != want {
 			t.Errorf("wanted %v got %v , given %v and %v", want, got, seqA, seqB)
@@ -106,6 +106,6 @@ func BenchmarkQGramDistance(b *testing.B) {
 	b.SetBytes(32)
 
 	for i := 0; i < b.N; i++ {
-		qGramDistance(seqA, seqB, alphabet)
+		QGramDistance(seqA, seqB, alphabet)
 	}
 }
