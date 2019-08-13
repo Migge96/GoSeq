@@ -20,6 +20,7 @@ func selectAlphabet(short string, alphabet *string) {
 	}
 }
 
+//QGramDistance computes the qGram Distance between seqA, and seqB
 func QGramDistance(seqA, seqB, alphabetShort string) int {
 	var alphabet string
 	selectAlphabet(alphabetShort, &alphabet)
